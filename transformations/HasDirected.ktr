@@ -462,80 +462,21 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Movie SQL table (sorted)</from>
-      <to>Merge on movie id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Director SQL table (sorted)</from>
-      <to>Merge on director id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Merge on movie id</from>
-      <to>Sort by director id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort by director id</from>
-      <to>Merge on director id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Merge on director id</from>
-      <to>Select output values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Select output values</from>
       <to>HasDirected SQL table</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Filter on director rows</from>
-      <to>Sort by movie id</to>
+      <to>Sort by movie id and director id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort by movie id</from>
-      <to>Merge on movie id</to>
+      <from>Sort by movie id and director id</from>
+      <to>Select output values</to>
       <enabled>Y</enabled>
     </hop>
   </order>
-  <step>
-    <name>Director SQL table (sorted)</name>
-    <type>TableInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <sql>SELECT *
-from director
-order by director_id</sql>
-    <limit>0</limit>
-    <lookup />
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>800</xloc>
-      <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
   <step>
     <name>Filter on director rows</name>
     <type>FilterRows</type>
@@ -547,7 +488,7 @@ order by director_id</sql>
       <method>none</method>
       <schema_name />
     </partitioning>
-    <send_true_to>Sort by movie id</send_true_to>
+    <send_true_to>Sort by movie id and director id</send_true_to>
     <send_false_to />
     <compare>
       <condition>
@@ -575,8 +516,52 @@ order by director_id</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>209</xloc>
-      <yloc>274</yloc>
+      <xloc>464</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>HasDirected SQL table</name>
+    <type>TableOutput</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>postgres</connection>
+    <schema>public</schema>
+    <table>hasdirected</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field />
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field />
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field />
+    <fields>
+    </fields>
+    <attributes />
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1024</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -755,110 +740,8 @@ order by director_id</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>64</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Merge on movie id</name>
-    <type>MergeJoin</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <join_type>INNER</join_type>
-    <step1>Sort by movie id</step1>
-    <step2>Movie SQL table (sorted)</step2>
-    <keys_1>
-      <key>tconst</key>
-    </keys_1>
-    <keys_2>
-      <key>movie_id</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>528</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Merge on director id</name>
-    <type>MergeJoin</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <join_type>INNER</join_type>
-    <step1>Sort by director id</step1>
-    <step2>Director SQL table (sorted)</step2>
-    <keys_1>
-      <key>nconst</key>
-    </keys_1>
-    <keys_2>
-      <key>director_id</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>800</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Movie SQL table (sorted)</name>
-    <type>TableInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <sql>SELECT *
-from movie
-order by movie_id</sql>
-    <limit>0</limit>
-    <lookup />
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>528</xloc>
-      <yloc>112</yloc>
+      <xloc>320</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -879,8 +762,8 @@ order by movie_id</sql>
         <rename>movie_id</rename>
       </field>
       <field>
-        <name>director_id</name>
-        <rename />
+        <name>nconst</name>
+        <rename>director_id</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -893,13 +776,13 @@ order by movie_id</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>928</xloc>
-      <yloc>272</yloc>
+      <xloc>880</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by movie id</name>
+    <name>Sort by movie id and director id</name>
     <type>SortRows</type>
     <description />
     <distribute>Y</distribute>
@@ -921,49 +804,15 @@ order by movie_id</sql>
         <name>tconst</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
+        <collator_enabled>Y</collator_enabled>
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>368</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Sort by director id</name>
-    <type>SortRows</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory />
-    <compress>N</compress>
-    <compress_variable />
-    <unique_rows>N</unique_rows>
-    <fields>
       <field>
         <name>nconst</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
+        <collator_enabled>Y</collator_enabled>
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
@@ -977,52 +826,8 @@ order by movie_id</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>HasDirected SQL table</name>
-    <type>TableOutput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <schema>public</schema>
-    <table>hasdirected</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field />
-    <fields>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1072</xloc>
-      <yloc>272</yloc>
+      <xloc>688</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

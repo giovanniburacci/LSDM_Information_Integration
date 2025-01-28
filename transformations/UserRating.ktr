@@ -524,115 +524,16 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Select and rename values</from>
-      <to>Sort on movie id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Movie SQL table (sorted)</from>
-      <to>Merge on movie id 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Merge on movie id 2</from>
-      <to>Select output values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Select output values</from>
       <to>UserRating SQL table</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort on movie id</from>
-      <to>Merge on movie id 2</to>
+      <from>Select and rename values</from>
+      <to>Select output values</to>
       <enabled>Y</enabled>
     </hop>
   </order>
-  <step>
-    <name>Ratings CSV</name>
-    <type>CsvInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <filename>/Users/giovanniburacci/Desktop/LSDM Data integration/datasets/ratings.csv</filename>
-    <filename_field />
-    <rownum_field />
-    <include_filename>N</include_filename>
-    <separator>,</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <lazy_conversion>Y</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <encoding />
-    <fields>
-      <field>
-        <name>userId</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>EUR</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>movieId</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>EUR</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>rating</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>EUR</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>3</length>
-        <precision>1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>timestamp</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>EUR</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>144</xloc>
-      <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
   <step>
     <name>ID links CSV</name>
     <type>CsvInput</type>
@@ -741,8 +642,8 @@
     </GUI>
   </step>
   <step>
-    <name>Merge on movie id 2</name>
-    <type>MergeJoin</type>
+    <name>Ratings CSV</name>
+    <type>CsvInput</type>
     <description />
     <distribute>Y</distribute>
     <custom_distribution />
@@ -751,50 +652,64 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <join_type>INNER</join_type>
-    <step1>Movie SQL table (sorted)</step1>
-    <step2>Sort on movie id</step2>
-    <keys_1>
-      <key>movie_id</key>
-    </keys_1>
-    <keys_2>
-      <key>movie_id</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1008</xloc>
-      <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Select ratings input values</name>
-    <type>SelectValues</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
+    <filename>/Users/giovanniburacci/Desktop/LSDM Data integration/datasets/ratings.csv</filename>
+    <filename_field />
+    <rownum_field />
+    <include_filename>N</include_filename>
+    <separator>,</separator>
+    <enclosure>"</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>Y</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <encoding />
     <fields>
       <field>
+        <name>userId</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>EUR</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
         <name>movieId</name>
-        <rename />
+        <type>Integer</type>
+        <format>#</format>
+        <currency>EUR</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
       </field>
       <field>
         <name>rating</name>
-        <rename />
+        <type>Number</type>
+        <format>#.#</format>
+        <currency>EUR</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>3</length>
+        <precision>1</precision>
+        <trim_type>none</trim_type>
       </field>
-      <select_unspecified>N</select_unspecified>
+      <field>
+        <name>timestamp</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>EUR</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
     </fields>
     <attributes />
     <cluster_schema />
@@ -805,44 +720,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>288</xloc>
+      <xloc>144</xloc>
       <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Select links input values</name>
-    <type>SelectValues</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <fields>
-      <field>
-        <name>movieId</name>
-        <rename />
-      </field>
-      <field>
-        <name>imdbId</name>
-        <rename />
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>416</xloc>
-      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -860,7 +739,6 @@
     <fields>
       <field>
         <name>rating</name>
-        <rename />
       </field>
       <field>
         <name>imdbId</name>
@@ -883,6 +761,40 @@
     </GUI>
   </step>
   <step>
+    <name>Select links input values</name>
+    <type>SelectValues</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>movieId</name>
+      </field>
+      <field>
+        <name>imdbId</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes />
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>416</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Select output values</name>
     <type>SelectValues</type>
     <description />
@@ -896,11 +808,9 @@
     <fields>
       <field>
         <name>movie_id</name>
-        <rename />
       </field>
       <field>
         <name>rating</name>
-        <rename />
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -913,14 +823,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1152</xloc>
+      <xloc>896</xloc>
       <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by movie id 2</name>
-    <type>SortRows</type>
+    <name>Select ratings input values</name>
+    <type>SelectValues</type>
     <description />
     <distribute>Y</distribute>
     <custom_distribution />
@@ -929,22 +839,14 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory />
-    <compress>N</compress>
-    <compress_variable />
-    <unique_rows>N</unique_rows>
     <fields>
       <field>
         <name>movieId</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
       </field>
+      <field>
+        <name>rating</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
     </fields>
     <attributes />
     <cluster_schema />
@@ -955,7 +857,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>432</xloc>
+      <xloc>288</xloc>
       <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1003,7 +905,7 @@
     </GUI>
   </step>
   <step>
-    <name>Sort on movie id</name>
+    <name>Sort by movie id 2</name>
     <type>SortRows</type>
     <description />
     <distribute>Y</distribute>
@@ -1022,7 +924,7 @@
     <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>movie_id</name>
+        <name>movieId</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <collator_enabled>N</collator_enabled>
@@ -1039,41 +941,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>864</xloc>
+      <xloc>432</xloc>
       <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Movie SQL table (sorted)</name>
-    <type>TableInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <sql>SELECT * from movie
-ORDER BY movie_id</sql>
-    <limit>0</limit>
-    <lookup />
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1008</xloc>
-      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1116,7 +985,7 @@ ORDER BY movie_id</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1056</xloc>
       <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>

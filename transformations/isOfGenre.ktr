@@ -466,21 +466,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Merge on movie id</from>
-      <to>Select output values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select output values</from>
-      <to>IsOfGenre SQL table</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Unique rows</from>
-      <to>Merge on movie id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>IMDB movies CSV</from>
       <to>Select input values</to>
       <enabled>Y</enabled>
@@ -501,8 +486,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Movie SQL table (sorted)</from>
-      <to>Merge on movie id</to>
+      <from>Unique rows</from>
+      <to>IsOfGenre SQL table</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -776,8 +761,8 @@
     </GUI>
   </step>
   <step>
-    <name>Merge on movie id</name>
-    <type>MergeJoin</type>
+    <name>IsOfGenre SQL table</name>
+    <type>TableOutput</type>
     <description />
     <distribute>Y</distribute>
     <custom_distribution />
@@ -786,50 +771,24 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <join_type>INNER</join_type>
-    <step1>Movie SQL table (sorted)</step1>
-    <step2>Unique rows</step2>
-    <keys_1>
-      <key>movie_id</key>
-    </keys_1>
-    <keys_2>
-      <key>movie_id</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1088</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Select input values</name>
-    <type>SelectValues</type>
-    <description />
-    <distribute>N</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
+    <connection>postgres</connection>
+    <schema>public</schema>
+    <table>isofgenre</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field />
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field />
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field />
     <fields>
-      <field>
-        <name>tconst</name>
-        <rename>movie_id</rename>
-      </field>
-      <field>
-        <name>genres</name>
-        <rename />
-      </field>
-      <select_unspecified>N</select_unspecified>
     </fields>
     <attributes />
     <cluster_schema />
@@ -840,7 +799,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>304</xloc>
+      <xloc>1152</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -882,10 +841,10 @@
     </GUI>
   </step>
   <step>
-    <name>Select output values</name>
+    <name>Select input values</name>
     <type>SelectValues</type>
     <description />
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution />
     <copies>1</copies>
     <partitioning>
@@ -894,12 +853,11 @@
     </partitioning>
     <fields>
       <field>
-        <name>movie_id</name>
-        <rename />
+        <name>tconst</name>
+        <rename>movie_id</rename>
       </field>
       <field>
-        <name>genre_name</name>
-        <rename />
+        <name>genres</name>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -912,7 +870,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1232</xloc>
+      <xloc>304</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -940,7 +898,7 @@
         <name>movie_id</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
+        <collator_enabled>Y</collator_enabled>
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
@@ -948,7 +906,7 @@
         <name>genre_name</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
+        <collator_enabled>Y</collator_enabled>
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
@@ -995,83 +953,6 @@
     </remotesteps>
     <GUI>
       <xloc>448</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Movie SQL table (sorted)</name>
-    <type>TableInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <sql>SELECT * from movie
-order by movie_id</sql>
-    <limit>0</limit>
-    <lookup />
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1088</xloc>
-      <yloc>96</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>IsOfGenre SQL table</name>
-    <type>TableOutput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <schema>public</schema>
-    <table>isofgenre</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field />
-    <fields>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1376</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>

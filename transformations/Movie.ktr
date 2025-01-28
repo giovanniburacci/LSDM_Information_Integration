@@ -467,11 +467,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Unique movie id</from>
-      <to>Movie SQL table</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Sort on movie id</from>
       <to>Unique movie id</to>
       <enabled>Y</enabled>
@@ -504,6 +499,11 @@
     <hop>
       <from>Merge on id</from>
       <to>Select output values</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique movie id</from>
+      <to>Movie SQL table</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -546,7 +546,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>/Users/giovanniburacci/Desktop/LSDM Data integration/title.basics.tsv</name>
+      <name>/Users/giovanniburacci/Desktop/LSDM Data integration/datasets/title.basics.tsv</name>
       <filemask />
       <exclude_filemask />
       <file_required>N</file_required>
@@ -561,10 +561,10 @@
         <name>tconst</name>
         <type>String</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <nullif>-</nullif>
+        <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
         <length>9</length>
@@ -576,10 +576,10 @@
         <name>titleType</name>
         <type>String</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <nullif>-</nullif>
+        <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
         <length>5</length>
@@ -591,13 +591,13 @@
         <name>primaryTitle</name>
         <type>String</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <nullif>-</nullif>
+        <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
-        <length>57</length>
+        <length>114</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -606,13 +606,13 @@
         <name>originalTitle</name>
         <type>String</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <nullif>-</nullif>
+        <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
-        <length>57</length>
+        <length>114</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -621,22 +621,7 @@
         <name>isAdult</name>
         <type>Integer</type>
         <format>#</format>
-        <currency />
-        <decimal>.</decimal>
-        <group>,</group>
-        <nullif>-</nullif>
-        <ifnull>0</ifnull>
-        <position>-1</position>
-        <length>-1</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>startYear</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
         <nullif>\N</nullif>
@@ -648,10 +633,25 @@
         <repeat>N</repeat>
       </field>
       <field>
+        <name>startYear</name>
+        <type>Integer</type>
+        <format />
+        <currency>EUR</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>\N</nullif>
+        <ifnull />
+        <position>-1</position>
+        <length>4</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
         <name>endYear</name>
         <type>Integer</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
         <nullif>\N</nullif>
@@ -666,13 +666,13 @@
         <name>runtimeMinutes</name>
         <type>Integer</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
         <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
-        <length>2</length>
+        <length>4</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -681,13 +681,13 @@
         <name>genres</name>
         <type>String</type>
         <format />
-        <currency />
+        <currency>EUR</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <nullif>-</nullif>
+        <nullif>\N</nullif>
         <ifnull />
         <position>-1</position>
-        <length>24</length>
+        <length>27</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -727,8 +727,86 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>48</xloc>
-      <yloc>176</yloc>
+      <xloc>128</xloc>
+      <yloc>96</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Merge on id</name>
+    <type>MergeJoin</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <join_type>LEFT OUTER</join_type>
+    <step1>Sort on movie_id</step1>
+    <step2>Sort on imdb_id</step2>
+    <keys_1>
+      <key>movie_id</key>
+    </keys_1>
+    <keys_2>
+      <key>imdb_id</key>
+    </keys_2>
+    <attributes />
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>96</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Movie SQL table</name>
+    <type>TableOutput</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>postgres</connection>
+    <schema>public</schema>
+    <table>movie</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field />
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field />
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field />
+    <fields>
+    </fields>
+    <attributes />
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1232</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1031,86 +1109,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>48</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Merge on id</name>
-    <type>MergeJoin</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <join_type>INNER</join_type>
-    <step1>Sort on movie_id</step1>
-    <step2>Sort on imdb_id</step2>
-    <keys_1>
-      <key>movie_id</key>
-    </keys_1>
-    <keys_2>
-      <key>imdb_id</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>544</xloc>
-      <yloc>176</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Movie SQL table</name>
-    <type>TableOutput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>postgres</connection>
-    <schema>public</schema>
-    <table>movie</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field />
-    <fields>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1072</xloc>
-      <yloc>176</yloc>
+      <xloc>128</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1166,8 +1166,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>176</yloc>
+      <xloc>272</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1185,11 +1185,9 @@
     <fields>
       <field>
         <name>imdb_id</name>
-        <rename />
       </field>
       <field>
         <name>overview</name>
-        <rename />
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -1202,8 +1200,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>272</xloc>
-      <yloc>304</yloc>
+      <xloc>352</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1255,8 +1253,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>656</xloc>
-      <yloc>176</yloc>
+      <xloc>736</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1287,6 +1285,14 @@
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
+      <field>
+        <name>overview</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
     </fields>
     <attributes />
     <cluster_schema />
@@ -1297,8 +1303,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>544</xloc>
-      <yloc>304</yloc>
+      <xloc>624</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1339,8 +1345,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>176</yloc>
+      <xloc>864</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1381,8 +1387,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>384</xloc>
-      <yloc>176</yloc>
+      <xloc>464</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1416,8 +1422,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>928</xloc>
-      <yloc>176</yloc>
+      <xloc>1008</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
