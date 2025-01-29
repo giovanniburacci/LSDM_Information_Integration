@@ -1,56 +1,62 @@
 
-/*  Birth year of actors still alive participating in a "Best Picture" Oscar-winning movie */
-select name , birth_year
-from actor a join hasactedin h on a.actor_id = h.actor_id
-	 join movie m on m.movie_id = h.movie_id
-	 join oscaraward o on o.movie_id = m.movie_id 
-where death_year is null and o.category = 'BEST PICTURE'
-
-/*  Name of genres associated with movies produced by "Paramount Pictures" */
-select distinct g."name" 
-from genre g join isofgenre i on g."name" = i.genre_name 
-	 join movie m on m.movie_id = i.movie_id 
-	 join studiohasproduced s on s.movie_id = m.movie_id
-where s.studio_name = 'Paramount'
-
-/* Name of actors and critics in movies directed by Christopher Nolan that have been criticized by such critic */
-select a.name
-from actor a join hasactedin h on a.actor_id = h.actor_id 
-	 join movie m on m.movie_id = h.movie_id 
-	 join hasdirected h2 on m.movie_id = h2.movie_id 
-	 join director d on h2.director_id = d.director_id
-where d.name = 'Christopher Nolan'
-
-/* Description of oscar-winning movies with at least one user rating less than 0.5 */
-select distinct m.description 
-from movie m join oscaraward o on m.movie_id = o.movie_id
-	 join userrating u on u.movie_id = m.movie_id
-where u.rating <= 0.5
-
-/* Title of horror movies with actors born after the year 1990 with a critic review on rotten tomato */
-select distinct m.title
-from movie m join isofgenre i on m.movie_id = i.movie_id 
-	 join genre g on g."name" = i.genre_name
-	 join hasactedin h on h.movie_id = m.movie_id 
-	 join actor a on h.actor_id = a.actor_id
-	 join criticreview c on c.movie_id = m.movie_id 
-where a.birth_year >= 1990 and g."name" = 'Horror'
-
-create table CriticReview (
-	critic_id bigserial not null primary key,
-	critic_name varchar(255) not null,
-	publisher varchar(255) not null,
-	content varchar(1024) not null,
-	review_date date not null,
-	score varchar(255) not null,
-	movie_id varchar(12) not null references movie (movie_id)
-)
-
-alter table CriticReview drop column critic_name
-
-alter table CriticReview add column critic_name varchar(255)
+/*  Name of actors born after 1960 participating in a "Best Picture" Oscar-winning movie,
+ * criticized by the Independent (UK) publisher */
+select distinct a."name" 
+from actor a, hasactedin h, movie m, oscaraward o, criticreview c
+where a.actor_id = h.actor_id
+	 and h.movie_id = m.movie_id 
+	 and m.movie_id = o.movie_id 
+	 and m.movie_id = c.movie_id 
+	 and birth_year > 1960 
+	 and o.category = 'BEST PICTURE' 
+	 and c.publisher = 'Independent (UK)'
 
 
-drop table CriticReview
+/*  Name of movies of genre Drama produced by "Paramount Pictures" where Cillian Murphy acted  */
+select m.title
+from genre g, isofgenre i, movie m, hasactedin h, studiohasproduced s, actor a
+where g."name" = i.genre_name 
+	 and i.movie_id = m.movie_id 
+	 and m.movie_id = s.movie_id 
+	 and i.movie_id = h.movie_id 
+	 and h.actor_id = a.actor_id 
+	 and s.studio_name = 'Paramount'
+	 and a."name" = 'Cillian Murphy'
+	 and g."name" = 'Drama'
 
-select * from CriticReview
+/* Name of critics that have criticized a movie directed by Cristopher Nolan where Al Pacino acted */
+select c.critic_name 
+from actor a, hasactedin h, movie m, hasdirected h2, criticreview c, director d
+where a.actor_id = h.actor_id 
+	 and h.movie_id = m.movie_id 
+	 and m.movie_id = h2.movie_id
+	 and h2.director_id = d.director_id 
+	 and m.movie_id = c.movie_id
+	 and d.name = 'Christopher Nolan' 
+	 and a."name" = 'Al Pacino'
+
+/* Name of directors and movie titles of oscar-winning movies in the DIRECTING category, produced by Warner Bros,
+ *  with at least one user rating less than 0.5 */
+select distinct d."name", m.title
+from movie m, oscaraward o, studiohasproduced s, userrating u, hasdirected h, director d
+where m.movie_id = o.movie_id 
+	 and m.movie_id = u.movie_id 
+	 and s.movie_id = m.movie_id 
+	 and h.movie_id = m.movie_id 
+	 and h.director_id = d.director_id 
+	 and u.rating <= 0.5 
+	 and s.studio_name = 'Warner Bros. Pictures' 
+	 and o.category = 'DIRECTING'
+
+/* Title of horror movies that last less than 100 minutes, and name of actors participating, born after the year 2000,
+ * with a critic review on rotten tomato */
+select distinct m.title, a."name" 
+from movie m, genre g, isofgenre i, criticreview c, hasactedin h, actor a
+where m.movie_id = i.movie_id
+	 and g."name" = i.genre_name 
+	 and h.movie_id = m.movie_id 
+	 and h.actor_id = a.actor_id 
+	 and c.movie_id = m.movie_id 
+	 and a.birth_year >= 2000 
+	 and g."name" = 'Horror' 
+	 and m.runtime < 100
