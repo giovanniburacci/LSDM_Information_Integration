@@ -25,6 +25,7 @@ share/python-wheels/
 .installed.cfg
 datasets/
 **/.DS_Store
+**/.idea
 *.egg
 MANIFEST
 
