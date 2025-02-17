@@ -11,7 +11,6 @@ where a.actor_id = h.actor_id
 	 and o.category = 'BEST PICTURE' 
 	 and c.publisher = 'Independent (UK)'
 
-
 /*  Name of movies of genre Drama produced by "Paramount Pictures" where Cillian Murphy acted  */
 select m.title
 from genre g, isofgenre i, movie m, hasactedin h, studiohasproduced s, actor a

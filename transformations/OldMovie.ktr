@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Movie</name>
-    <description>Movie</description>
+    <name>OldMovie</name>
+    <description>OldMovie</description>
     <extended_description />
     <trans_version />
     <trans_type>Normal</trans_type>
@@ -462,8 +462,18 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>Select output values</from>
+      <to>Sort on movie id</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort on movie id</from>
+      <to>Unique movie id</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>Select IMDB values</from>
-      <to>Sort by movie_id</to>
+      <to>Sort on movie_id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -473,57 +483,27 @@
     </hop>
     <hop>
       <from>Select movielens values</from>
-      <to>Sort by imdb_id</to>
+      <to>Sort on imdb_id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Select output values</from>
-      <to>Movie SQL table</to>
+      <from>Sort on movie_id</from>
+      <to>Merge on id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>MongoDB input</from>
-      <to>Sort by title and year 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort by title and year 2</from>
-      <to>Merge join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort by title and year</from>
-      <to>Merge join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Merge join</from>
-      <to>Select output values</to>
+      <from>Sort on imdb_id</from>
+      <to>Merge on id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Merge on id</from>
-      <to>Sort by title and year</to>
+      <to>Select output values</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort by movie_id</from>
-      <to>Unique id 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Unique id 2</from>
-      <to>Merge on id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort by imdb_id</from>
-      <to>Unique id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Unique id</from>
-      <to>Merge on id</to>
+      <from>Unique movie id</from>
+      <to>Movie SQL table</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -753,42 +733,6 @@
     </GUI>
   </step>
   <step>
-    <name>Merge join</name>
-    <type>MergeJoin</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <join_type>RIGHT OUTER</join_type>
-    <step1>Sort by title and year 2</step1>
-    <step2>Sort by title and year</step2>
-    <keys_1>
-      <key>title</key>
-      <key>year</key>
-    </keys_1>
-    <keys_2>
-      <key>title</key>
-      <key>startYear</key>
-    </keys_2>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Merge on id</name>
     <type>MergeJoin</type>
     <description />
@@ -800,8 +744,8 @@
       <schema_name />
     </partitioning>
     <join_type>LEFT OUTER</join_type>
-    <step1>Unique id 2</step1>
-    <step2>Unique id</step2>
+    <step1>Sort on movie_id</step1>
+    <step2>Sort on imdb_id</step2>
     <keys_1>
       <key>movie_id</key>
     </keys_1>
@@ -817,155 +761,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>352</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>MongoDB input</name>
-    <type>MongoDbInput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <hostname>localhost</hostname>
-    <port>27017</port>
-    <use_all_replica_members>N</use_all_replica_members>
-    <db_name>movies</db_name>
-    <fields_name />
-    <collection>movies</collection>
-    <json_field_name>json</json_field_name>
-    <json_query />
-    <auth_database />
-    <auth_user />
-    <auth_password>Encrypted </auth_password>
-    <auth_mech />
-    <auth_kerberos>N</auth_kerberos>
-    <connect_timeout />
-    <socket_timeout />
-    <use_ssl_socket_factory>N</use_ssl_socket_factory>
-    <read_preference>primary</read_preference>
-    <output_json>N</output_json>
-    <query_is_pipeline>N</query_is_pipeline>
-    <execute_for_each_row>N</execute_for_each_row>
-    <mongo_fields>
-      <mongo_field>
-        <field_name>cast[0]</field_name>
-        <field_path>$.cast[0]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>genres[0]</field_name>
-        <field_path>$.genres[0]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>thumbnail</field_name>
-        <field_path>$.thumbnail</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>extract</field_name>
-        <field_path>$.extract</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>year</field_name>
-        <field_path>$.year</field_path>
-        <field_type>Integer</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>thumbnail_width</field_name>
-        <field_path>$.thumbnail_width</field_path>
-        <field_type>Integer</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>_id</field_name>
-        <field_path>$._id</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>href</field_name>
-        <field_path>$.href</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>genres[2]</field_name>
-        <field_path>$.genres[2]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>title</field_name>
-        <field_path>$.title</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>genres[1]</field_name>
-        <field_path>$.genres[1]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>thumbnail_height</field_name>
-        <field_path>$.thumbnail_height</field_path>
-        <field_type>Integer</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>genres[4]</field_name>
-        <field_path>$.genres[4]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>genres[3]</field_name>
-        <field_path>$.genres[3]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[1]</field_name>
-        <field_path>$.cast[1]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[6]</field_name>
-        <field_path>$.cast[6]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[4]</field_name>
-        <field_path>$.cast[4]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[5]</field_name>
-        <field_path>$.cast[5]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[2]</field_name>
-        <field_path>$.cast[2]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-      <mongo_field>
-        <field_name>cast[3]</field_name>
-        <field_path>$.cast[3]</field_path>
-        <field_type>String</field_type>
-      </mongo_field>
-    </mongo_fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>544</xloc>
-      <yloc>144</yloc>
+      <xloc>624</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1008,8 +805,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1024</xloc>
-      <yloc>288</yloc>
+      <xloc>1232</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1313,7 +1110,7 @@
     </remotesteps>
     <GUI>
       <xloc>128</xloc>
-      <yloc>448</yloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1369,8 +1166,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>128</xloc>
-      <yloc>192</yloc>
+      <xloc>272</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1403,8 +1200,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>128</xloc>
-      <yloc>368</yloc>
+      <xloc>352</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1421,21 +1218,13 @@
     </partitioning>
     <fields>
       <field>
-        <name>thumbnail</name>
-        <rename>wikithumbnail</rename>
-      </field>
-      <field>
-        <name>extract</name>
-        <rename>wikiextract</rename>
-      </field>
-      <field>
         <name>movie_id</name>
       </field>
       <field>
-        <name>title</name>
+        <name>type</name>
       </field>
       <field>
-        <name>type</name>
+        <name>title</name>
       </field>
       <field>
         <name>original_title</name>
@@ -1464,16 +1253,16 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>864</xloc>
-      <yloc>288</yloc>
+      <xloc>736</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by imdb_id</name>
+    <name>Sort on imdb_id</name>
     <type>SortRows</type>
     <description />
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution />
     <copies>1</copies>
     <partitioning>
@@ -1514,16 +1303,16 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>368</yloc>
+      <xloc>624</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by movie_id</name>
+    <name>Sort on movie id</name>
     <type>SortRows</type>
     <description />
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution />
     <copies>1</copies>
     <partitioning>
@@ -1556,13 +1345,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>192</yloc>
+      <xloc>864</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by title and year</name>
+    <name>Sort on movie_id</name>
     <type>SortRows</type>
     <description />
     <distribute>Y</distribute>
@@ -1581,15 +1370,7 @@
     <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>title</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>Y</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>startYear</name>
+        <name>movie_id</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <collator_enabled>N</collator_enabled>
@@ -1606,98 +1387,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
-      <yloc>288</yloc>
+      <xloc>464</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by title and year 2</name>
-    <type>SortRows</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory />
-    <compress>N</compress>
-    <compress_variable />
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>title</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>Y</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>year</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Unique id</name>
-    <type>Unique</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <count_rows>N</count_rows>
-    <count_field />
-    <reject_duplicate_row>N</reject_duplicate_row>
-    <error_description />
-    <fields>
-      <field>
-        <name>imdb_id</name>
-        <case_insensitive>N</case_insensitive>
-      </field>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>352</xloc>
-      <yloc>368</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Unique id 2</name>
+    <name>Unique movie id</name>
     <type>Unique</type>
     <description />
     <distribute>Y</distribute>
@@ -1714,7 +1410,7 @@
     <fields>
       <field>
         <name>movie_id</name>
-        <case_insensitive>N</case_insensitive>
+        <case_insensitive>Y</case_insensitive>
       </field>
     </fields>
     <attributes />
@@ -1726,8 +1422,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>352</xloc>
-      <yloc>192</yloc>
+      <xloc>1008</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
