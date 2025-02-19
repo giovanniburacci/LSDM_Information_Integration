@@ -43,13 +43,15 @@ CREATE TABLE isofgenre (
 
 CREATE TABLE movie (
 	movie_id varchar(12) NOT NULL,
-	original_title varchar(255) NOT NULL,
-	title varchar(255) NOT NULL,
 	"type" varchar(255) NULL,
 	description varchar(2048) NULL,
 	runtime int4 NULL,
 	startyear int4 NULL,
-	endyear int4 NULL
+	endyear int4 NULL,
+	title varchar(1024) NULL,
+	original_title varchar(1024) NULL,
+	wikiextract varchar(2048) NULL,
+	wikithumbnail varchar(2048) NULL
 );
 
 
@@ -70,4 +72,12 @@ CREATE TABLE userrating (
 	rating float8 NOT NULL,
 	movie_id varchar(12) NULL,
 	rating_id bigserial NOT NULL
+);
+
+CREATE TABLE energyscore (
+	humor int4 NULL,
+	rhythm int4 NULL,
+	effort int4 NULL,
+	tension int4 NULL,
+	movie_id varchar(12) NULL
 );
